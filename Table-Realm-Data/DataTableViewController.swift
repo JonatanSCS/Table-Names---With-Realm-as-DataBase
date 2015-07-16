@@ -11,21 +11,18 @@ import RealmSwift
 import Realm
 
 
-
 class Person: Object {
     dynamic var name = ""
-    
 }
 
 
 class DataTableViewController: UITableViewController, UITableViewDataSource, UITableViewDelegate {
+    
     var array: Array <AnyObject> = []
-    
-    @IBOutlet var textField: UITextField!
 
-    
-    
+    @IBOutlet var textField: UITextField!
     @IBAction func saveButton(sender: AnyObject) {
+        
         if textField.text != "" {
             var info = textField.text
             array.append(info)
@@ -37,46 +34,45 @@ class DataTableViewController: UITableViewController, UITableViewDataSource, UIT
             
             realm.write {
                 realm.add(personita)
-                
             }
         }
+            
         else {
             println("TONTO")
         }
         
         textField.text = ""
         tableView.reloadData()
-        
-        
-        
     }
     
     
     @IBAction func deleteAll(sender: AnyObject) {
         let realm = Realm()
         
-        
         realm.write {
             realm.deleteAll()
-            
         }
         
         array = []
         tableView.reloadData()
     }
     
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated);
-       array = []
-         var personitasReload = Realm().objects(Person)
+        array = []
+        
+        var personitasReload = Realm().objects(Person)
         println(personitasReload)
+        
         for personita in personitasReload {
             array.append(personita.name)
-            
         }
-        tableView.reloadData()
         
+        tableView.reloadData()
     }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,24 +80,22 @@ class DataTableViewController: UITableViewController, UITableViewDataSource, UIT
         
         for personita in personitasReload {
             array.append(personita.name)
-
-            
         }
-        
     }
+    
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
+
 
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Potentially incomplete method implementation.
         // Return the number of sections.
-        
         
         return 1
     }
@@ -133,45 +127,44 @@ class DataTableViewController: UITableViewController, UITableViewDataSource, UIT
     
     
     var deletes: Object = Person()
+    
     func deleteRealm() {
         var realm = Realm()
+        
         realm.write {
             realm.delete(self.deletes)
         }
-
-    
-        
     }
     
-    // Override to support editing the table view.
+    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        
          var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
         
         if editingStyle == .Delete {
-            // Delete the row from the data source
             var arraynumber: AnyObject = array[indexPath.row]
+            
             array.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             
-          var realm = Realm()
+            var realm = Realm()
             var personitasReload = Realm().objects(Person)
             
             for personita in personitasReload {
                 if personita.name == arraynumber as! String {
-                    
                     deletes = personita
-                    
                 }
               }
+            
             deleteRealm()
 
-            
+    
 
-        } else if editingStyle == .Insert {
+        }
+        else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
-            }
+        
+    }
     
     
         override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -179,6 +172,5 @@ class DataTableViewController: UITableViewController, UITableViewDataSource, UIT
             let indexPath = self.tableView.indexPathForSelectedRow()
             nextScene.labelFrom = (self.array[indexPath!.row] as? String)!
         }
-    
-    
+ 
 }
