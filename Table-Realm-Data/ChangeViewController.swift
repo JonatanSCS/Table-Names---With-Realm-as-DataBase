@@ -31,7 +31,7 @@ class ChangeViewController: UIViewController {
             }
             println(personita.description)
         }
-        
+        textField.resignFirstResponder()
         println(personitasReload)
         navigationController?.popViewControllerAnimated(true)
     }

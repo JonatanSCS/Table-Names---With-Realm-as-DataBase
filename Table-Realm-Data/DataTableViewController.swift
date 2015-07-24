@@ -41,6 +41,7 @@ class DataTableViewController: UITableViewController, UITableViewDataSource, UIT
             println("TONTO")
         }
         
+        textField.resignFirstResponder()
         textField.text = ""
         tableView.reloadData()
     }
